@@ -1,51 +1,50 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { usePDFStore } from "./store/pdfStore";
+import Header from "./components/layout/Header";
+import Sidebar from "./components/layout/Sidebar";
+import PDFViewer from "./components/pdf/PDFViewer";
+import PDFToolbar from "./components/pdf/PDFToolbar";
+import ChatPanel from "./components/layout/ChatPanel";
+import StatusBar from "./components/layout/StatusBar";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+/**
+ * Main application container. The only component that owns state.
+ * Delegates rendering to child components.
+ */
+export default function App() {
+  const {
+    currentFile,
+    currentPage,
+    zoom,
+    loading,
+    error,
+    setNumPages,
+    setError,
+  } = usePDFStore();
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="h-screen w-screen flex flex-col bg-zinc-950 text-white">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <div className="flex-1 flex flex-col">
+          <PDFToolbar />
+          <PDFViewer
+            file={currentFile}
+            currentPage={currentPage}
+            zoom={zoom}
+            loading={loading}
+            error={error}
+            onLoadSuccess={(doc: any) => {
+              setNumPages(doc.numPages);
+            }}
+            onLoadError={(err: any) => {
+              setError(err);
+            }}
+          />
+        </div>
+        <ChatPanel />
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      <StatusBar />
+    </div>
   );
 }
-
-export default App;
