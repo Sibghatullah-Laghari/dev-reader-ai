@@ -1,51 +1,71 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { usePDFStore } from "./store/pdfStore";
+import Header from "./components/layout/Header";
+import Sidebar from "./components/layout/Sidebar";
+import ChatPanel from "./components/layout/ChatPanel";
+import StatusBar from "./components/layout/StatusBar";
+import PDFToolbar from "./components/pdf/PDFToolbar";
+import PDFViewer from "./components/pdf/PDFViewer";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+/**
+ * Main application container.
+ *
+ * Desktop layout (fills the window, no page scroll):
+ *
+ *   ┌───────────────────────────────────────────┐
+ *   │                 Header                    │
+ *   ├──────┬───────────────────────┬────────────┤
+ *   │      │     PDF Toolbar        │            │
+ *   │ Side │ ┌───────────────────┐ │  AI Chat   │
+ *   │ bar  │ │   PDF Viewer       │ │  Panel    │
+ *   │      │ │  (scrollable)      │ │            │
+ *   │      │ └───────────────────┘ │            │
+ *   ├──────┴───────────────────────┴────────────┤
+ *   │                Status Bar                 │
+ *   └───────────────────────────────────────────┘
+ *
+ * Only the PDF viewer area scrolls; every other region is fixed.
+ */
+export default function App() {
+  const currentFile = usePDFStore((state) => state.currentFile);
+  const currentPage = usePDFStore((state) => state.currentPage);
+  const zoom = usePDFStore((state) => state.zoom);
+  const error = usePDFStore((state) => state.error);
+  const setNumPages = usePDFStore((state) => state.setNumPages);
+  const setError = usePDFStore((state) => state.setError);
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-slate-100 text-slate-900">
+      {/* Top header — fixed height */}
+      <Header />
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      {/* Body — fills the remaining vertical space, never scrolls */}
+      <div className="flex min-h-0 flex-1">
+        {/* Left sidebar — fixed 260px */}
+        <Sidebar />
+
+        {/* Center column — grows, holds toolbar + scrollable viewer */}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <PDFToolbar />
+          <PDFViewer
+            file={currentFile}
+            currentPage={currentPage}
+            zoom={zoom}
+            error={error}
+            onLoadSuccess={(doc) => {
+              setNumPages(doc.numPages);
+            }}
+            onLoadError={(err) => {
+              setError(err);
+            }}
+          />
+        </div>
+
+        {/* Right sidebar — fixed 340px */}
+        <ChatPanel />
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      {/* Bottom status bar — fixed height */}
+      <StatusBar />
+    </div>
   );
 }
-
-export default App;

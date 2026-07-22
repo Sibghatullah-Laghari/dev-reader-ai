@@ -1,24 +1,317 @@
-# Logs
-logs
+# =============================================================================
+# Dev Reader AI — Comprehensive .gitignore
+# Stack: Tauri (Rust) + Vite + React + TypeScript + pnpm
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+vendor/
+
+# -----------------------------------------------------------------------------
+# Package manager artifacts
+# -----------------------------------------------------------------------------
+# NOTE: Keep pnpm-lock.yaml / package-lock.json / yarn.lock committed for
+# reproducible installs. Uncomment below ONLY if you deliberately don't want them.
+# pnpm-lock.yaml
+# package-lock.json
+# yarn.lock
+.npmrc.local
+.npm/
+.eslintcache
+.stylelintcache
+
+# -----------------------------------------------------------------------------
+# Build outputs / Bundles
+# -----------------------------------------------------------------------------
+dist/
+dist-ssr/
+dist-*/
+build/
+out/
+.output/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Vite
+.vite/
+.vite-inspect/
+vite.config.ts.timestamp-*
+*.local
+
+# -----------------------------------------------------------------------------
+# Rust / Cargo / Tauri
+# -----------------------------------------------------------------------------
+# Cargo build artifacts (any target dir, anywhere in the tree)
+target/
+**/target/
+**/*.rs.bk
+
+# Tauri generated files & bundles
+src-tauri/target/
+src-tauri/gen/schemas/
+# src-tauri/Cargo.lock   # Uncomment ONLY if building a lib; keep committed for apps
+*.app
+*.app.zip
+*.dmg
+*.msi
+*.AppImage
+*.deb
+*.rpm
+*.snap
+*.exe
+*.nsis
+*.wix
+*.nupkg
+*.sig
+
+# -----------------------------------------------------------------------------
+# Environment variables & Secrets (CRITICAL — never commit these)
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.p12
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+*.cert
+*.crt
+*.der
+*.pfx
+secrets.json
+credentials.json
+service-account*.json
+*.secrets
+
+# API keys accidentally placed in files
+*api-key*
+*apikey*
+*-token.json
+
+# -----------------------------------------------------------------------------
+# Logs & Debugging
+# -----------------------------------------------------------------------------
+logs/
+log/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+debug.log*
+*.stackdump
+*.dmp
+core
+core.*
+crash-*.log
+crash-reports/
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-node_modules
-dist
-dist-ssr
-*.local
+# Profiling / tracing output
+*.cpuprofile
+*.heapprofile
+*.trace
+flamegraph*.html
+perf.data
+perf.data.old
 
-# Editor directories and files
+# -----------------------------------------------------------------------------
+# Testing & Coverage
+# -----------------------------------------------------------------------------
+coverage/
+coverage-*/
+*.lcov
+.nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
+blob-report/
+e2e-report/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+junit*.xml
+*.test-snapshots
+__snapshots__/*.snap.tmp
+
+# -----------------------------------------------------------------------------
+# Caches & Temp files
+# -----------------------------------------------------------------------------
+.cache/
+.temp/
+.tmp/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+*.swn
+*~
+*.orig
+*.rej
+.parcel-cache/
+.turbo/
+.nx/
+.next/
+.nuxt/
+.svelte-kit/
+.vercel/
+.netlify/
+.serverless/
+
+# -----------------------------------------------------------------------------
+# OS generated files
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon?
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# -----------------------------------------------------------------------------
+# Editor / IDE directories & files
+# -----------------------------------------------------------------------------
+# VS Code (keep shared recommendations, ignore everything else)
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/snippets/
+*.code-workspace
+.history/
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+cmake-build-*/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+*.sublime-settings
+
+# Vim / Neovim
+.*.sw[a-p]
+Session.vim
+.netrwhist
+*.un~
+tags
+
+# Emacs
+\#*\#
+.\#*
+.dir-locals.el
+flycheck_*
+
+# Other editors
+.project
+.classpath
+.settings/
+.factorypath
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.komodoproject
+*.tmproj
+*.tmproject
+.atom/
+.zed/
+.fleet/
+
+# -----------------------------------------------------------------------------
+# Mobile (if you add tauri mobile / capacitor in future)
+# -----------------------------------------------------------------------------
+.android/
+.ios/
+*.apk
+*.aab
+*.ipa
+*.dSYM/
+*.dSYM.zip
+Pods/
+DerivedData/
+
+# -----------------------------------------------------------------------------
+# Database & local data files
+# -----------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.duckdb
+*.local-data
+
+# -----------------------------------------------------------------------------
+# AI / ML artifacts (if you add model files or datasets later)
+# -----------------------------------------------------------------------------
+*.bin
+*.safetensors
+*.gguf
+*.onnx
+models/
+checkpoints/
+datasets/
+wandb/
+mlruns/
+.ipynb_checkpoints/
+
+# -----------------------------------------------------------------------------
+# Misc generated files
+# -----------------------------------------------------------------------------
+*.generated.*
+generated/
+.generated/
+stats.json
+bundle-report.html
+webpack-bundle-analyzer/
+analyzer/
+
+# -----------------------------------------------------------------------------
+# Tauri specific additions
+# -----------------------------------------------------------------------------
+src-tauri/WixTools/
+src-tauri/nsis/
+src-tauri/resources/generated/
+*.crash
