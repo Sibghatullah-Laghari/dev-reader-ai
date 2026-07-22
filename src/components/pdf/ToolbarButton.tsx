@@ -7,9 +7,9 @@ interface ToolbarButtonProps {
   disabled?: boolean;
 }
 
-/**
+/**.
  * Compact icon button used throughout the toolbars.
- *
+ *..
  * Light, professional styling with clear hover/disabled states.
  */
 export default function ToolbarButton({

@@ -26,10 +26,10 @@ interface PDFViewerProps {
 }
 
 /**
- * Stateless PDF viewer — a thin wrapper around react-pdf.
+ * Stateless PDF viewer — a thin wrapper around react-pdf...
  *
  * Owns no application state. The document, current page, and zoom are
- * received via props; load results are reported through callbacks.
+ * received via props; load results are reported through <callbacks styleName={}></callbacks>
  *
  * Layout contract:
  *  - Fills all remaining space in the center column.

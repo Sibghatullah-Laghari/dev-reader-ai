@@ -3,7 +3,7 @@ interface LoadingViewProps {
 }
 
 /**
- * Spinner + message shown while a PDF is loading or rendering.
+ * Spinner + message shown while a PDF is loading or rendering..
  */
 export default function LoadingView({
   message = "Loading PDF…",

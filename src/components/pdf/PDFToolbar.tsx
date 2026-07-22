@@ -16,7 +16,7 @@ import ToolbarButton from "./ToolbarButton";
  *
  * Horizontal controls for document navigation and zoom, plus the
  * "Open PDF" action and a "Fit width" placeholder. All state is read
- * from the shared PDF store.
+ * from the shared PDF store...
  */
 export default function PDFToolbar() {
   const openPDF = useOpenPDF();
