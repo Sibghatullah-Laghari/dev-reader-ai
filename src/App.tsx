@@ -1,49 +1,70 @@
 import { usePDFStore } from "./store/pdfStore";
 import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
-import PDFViewer from "./components/pdf/PDFViewer";
-import PDFToolbar from "./components/pdf/PDFToolbar";
 import ChatPanel from "./components/layout/ChatPanel";
 import StatusBar from "./components/layout/StatusBar";
+import PDFToolbar from "./components/pdf/PDFToolbar";
+import PDFViewer from "./components/pdf/PDFViewer";
 
 /**
- * Main application container. The only component that owns state.
- * Delegates rendering to child components.
+ * Main application container.
+ *
+ * Desktop layout (fills the window, no page scroll):
+ *
+ *   ┌───────────────────────────────────────────┐
+ *   │                 Header                    │
+ *   ├──────┬───────────────────────┬────────────┤
+ *   │      │     PDF Toolbar        │            │
+ *   │ Side │ ┌───────────────────┐ │  AI Chat   │
+ *   │ bar  │ │   PDF Viewer       │ │  Panel    │
+ *   │      │ │  (scrollable)      │ │            │
+ *   │      │ └───────────────────┘ │            │
+ *   ├──────┴───────────────────────┴────────────┤
+ *   │                Status Bar                 │
+ *   └───────────────────────────────────────────┘
+ *
+ * Only the PDF viewer area scrolls; every other region is fixed.
  */
 export default function App() {
-  const {
-    currentFile,
-    currentPage,
-    zoom,
-    loading,
-    error,
-    setNumPages,
-    setError,
-  } = usePDFStore();
+  const currentFile = usePDFStore((state) => state.currentFile);
+  const currentPage = usePDFStore((state) => state.currentPage);
+  const zoom = usePDFStore((state) => state.zoom);
+  const error = usePDFStore((state) => state.error);
+  const setNumPages = usePDFStore((state) => state.setNumPages);
+  const setError = usePDFStore((state) => state.setError);
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-zinc-950 text-white">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-slate-100 text-slate-900">
+      {/* Top header — fixed height */}
       <Header />
-      <div className="flex flex-1 overflow-hidden">
+
+      {/* Body — fills the remaining vertical space, never scrolls */}
+      <div className="flex min-h-0 flex-1">
+        {/* Left sidebar — fixed 260px */}
         <Sidebar />
-        <div className="flex-1 flex flex-col">
+
+        {/* Center column — grows, holds toolbar + scrollable viewer */}
+        <div className="flex min-w-0 flex-1 flex-col">
           <PDFToolbar />
           <PDFViewer
             file={currentFile}
             currentPage={currentPage}
             zoom={zoom}
-            loading={loading}
             error={error}
-            onLoadSuccess={(doc: any) => {
+            onLoadSuccess={(doc) => {
               setNumPages(doc.numPages);
             }}
-            onLoadError={(err: any) => {
+            onLoadError={(err) => {
               setError(err);
             }}
           />
         </div>
+
+        {/* Right sidebar — fixed 340px */}
         <ChatPanel />
       </div>
+
+      {/* Bottom status bar — fixed height */}
       <StatusBar />
     </div>
   );

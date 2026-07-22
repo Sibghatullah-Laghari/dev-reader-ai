@@ -7,6 +7,11 @@ interface ToolbarButtonProps {
   disabled?: boolean;
 }
 
+/**
+ * Compact icon button used throughout the toolbars.
+ *
+ * Light, professional styling with clear hover/disabled states.
+ */
 export default function ToolbarButton({
   label,
   icon: Icon,
@@ -20,9 +25,9 @@ export default function ToolbarButton({
       disabled={disabled}
       title={label}
       aria-label={label}
-      className="rounded p-1.5 text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-zinc-300"
+      className="rounded-md p-1.5 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-600"
     >
-      <Icon size={16} />
+      <Icon size={17} strokeWidth={2} />
     </button>
   );
 }

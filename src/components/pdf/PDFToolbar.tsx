@@ -1,57 +1,107 @@
-import { Maximize, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  FolderOpen,
+  Maximize,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
+import { useOpenPDF } from "../../hooks/useOpenPDF";
 import { usePDFStore } from "../../store/pdfStore";
 import { MAX_ZOOM, MIN_ZOOM } from "../../types/pdf";
-import PageNavigation from "./PageNavigation";
 import ToolbarButton from "./ToolbarButton";
 
+/**
+ * Center-area toolbar.
+ *
+ * Horizontal controls for document navigation and zoom, plus the
+ * "Open PDF" action and a "Fit width" placeholder. All state is read
+ * from the shared PDF store.
+ */
 export default function PDFToolbar() {
-  const zoom = usePDFStore((state) => state.zoom);
+  const openPDF = useOpenPDF();
+
+  const currentPage = usePDFStore((state) => state.currentPage);
   const numPages = usePDFStore((state) => state.numPages);
+  const zoom = usePDFStore((state) => state.zoom);
+  const nextPage = usePDFStore((state) => state.nextPage);
+  const previousPage = usePDFStore((state) => state.previousPage);
   const zoomIn = usePDFStore((state) => state.zoomIn);
   const zoomOut = usePDFStore((state) => state.zoomOut);
-  const resetZoom = usePDFStore((state) => state.resetZoom);
 
   const hasDocument = numPages > 0;
 
   return (
-    <div className="flex h-11 shrink-0 items-center justify-between border-b border-zinc-800 bg-zinc-900 px-3">
-      <PageNavigation />
+    <div className="flex h-11 shrink-0 items-center gap-2 border-b border-slate-200 bg-white px-3">
+      {/* Open PDF */}
+      <ToolbarButton
+        label="Open PDF"
+        icon={FolderOpen}
+        onClick={openPDF}
+      />
 
-      <div className="flex items-center gap-1">
-        <ToolbarButton
-          label="Zoom out"
-          icon={ZoomOut}
-          onClick={zoomOut}
-          disabled={!hasDocument || zoom <= MIN_ZOOM}
-        />
-        <span className="min-w-12 text-center text-xs text-zinc-400 tabular-nums">
-          {Math.round(zoom * 100)}%
-        </span>
-        <ToolbarButton
-          label="Zoom in"
-          icon={ZoomIn}
-          onClick={zoomIn}
-          disabled={!hasDocument || zoom >= MAX_ZOOM}
-        />
+      <Divider />
 
-        <div className="mx-1 h-4 w-px bg-zinc-700" aria-hidden="true" />
+      {/* Page navigation */}
+      <ToolbarButton
+        label="Previous page"
+        icon={ChevronLeft}
+        onClick={previousPage}
+        disabled={!hasDocument || currentPage <= 1}
+      />
+      <span className="min-w-18 text-center text-xs font-medium text-slate-600 tabular-nums">
+        {hasDocument ? `${currentPage} / ${numPages}` : "— / —"}
+      </span>
+      <ToolbarButton
+        label="Next page"
+        icon={ChevronRight}
+        onClick={nextPage}
+        disabled={!hasDocument || currentPage >= numPages}
+      />
 
-        <ToolbarButton
-          label="Reset zoom"
-          icon={RotateCcw}
-          onClick={resetZoom}
-          disabled={!hasDocument}
-        />
-        <ToolbarButton
-          label="Fit width (coming soon)"
-          icon={Maximize}
-          onClick={() => {
-            // Placeholder — fit-width mode will be implemented in a
-            // later milestone. Intentionally a no-op for now.
-          }}
-          disabled={!hasDocument}
-        />
-      </div>
+      <Divider />
+
+      {/* Zoom controls */}
+      <ToolbarButton
+        label="Zoom out"
+        icon={ZoomOut}
+        onClick={zoomOut}
+        disabled={!hasDocument || zoom <= MIN_ZOOM}
+      />
+      <span className="min-w-12 text-center text-xs font-medium text-slate-600 tabular-nums">
+        {Math.round(zoom * 100)}%
+      </span>
+      <ToolbarButton
+        label="Zoom in"
+        icon={ZoomIn}
+        onClick={zoomIn}
+        disabled={!hasDocument || zoom >= MAX_ZOOM}
+      />
+
+      <Divider />
+
+      {/* Fit width (placeholder) */}
+      <ToolbarButton
+        label="Fit width (coming soon)"
+        icon={Maximize}
+        onClick={() => {
+          // Placeholder — fit-width mode will land in a later milestone.
+        }}
+        disabled={!hasDocument}
+      />
+
+      {/* Spacer */}
+      <div className="flex-1" />
+
+      {/* Document name (future) */}
+      <span className="truncate text-xs text-slate-400">
+        {hasDocument ? "PDF Document" : ""}
+      </span>
     </div>
   );
+}
+
+/** Small vertical separator used between toolbar groups. */
+function Divider() {
+  return <div className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />;
 }

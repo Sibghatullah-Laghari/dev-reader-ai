@@ -2,17 +2,20 @@ interface LoadingViewProps {
   message?: string;
 }
 
+/**
+ * Spinner + message shown while a PDF is loading or rendering.
+ */
 export default function LoadingView({
   message = "Loading PDF…",
 }: LoadingViewProps) {
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center gap-3 text-zinc-400"
+      className="flex h-full w-full flex-col items-center justify-center gap-3 text-slate-500"
       role="status"
       aria-live="polite"
     >
       <svg
-        className="h-8 w-8 animate-spin text-zinc-500"
+        className="h-7 w-7 animate-spin text-indigo-500"
         fill="none"
         viewBox="0 0 24 24"
         aria-hidden="true"
