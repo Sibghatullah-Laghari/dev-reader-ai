@@ -9,7 +9,7 @@ import { Bot, MessageSquare, SendHorizontal } from "lucide-react";
  */
 export default function ChatPanel() {
   return (
-    <aside className="flex h-full w-85 shrink-0 flex-col border-l border-slate-200 bg-white">
+    <aside className="flex h-full w-80 shrink-0 flex-col border-l border-slate-200 bg-white">
       {/* AI Assistant header */}
       <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-3">
         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-indigo-50 text-indigo-600">

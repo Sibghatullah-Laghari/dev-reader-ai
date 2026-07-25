@@ -8,7 +8,7 @@ import { FileText, Library } from "lucide-react";
  */
 export default function Sidebar() {
   return (
-    <aside className="flex h-full w-65 shrink-0 flex-col border-r border-slate-200 bg-white">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-slate-200 bg-white">
       {/* Library heading */}
       <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-3">
         <Library size={15} strokeWidth={2} className="text-slate-400" />

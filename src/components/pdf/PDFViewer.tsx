@@ -1,5 +1,4 @@
 import { Document, Page, pdfjs } from "react-pdf";
-import type { DocumentProps } from "react-pdf";
 
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
@@ -18,18 +17,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface PDFViewerProps {
   file: PDFFileSource | null;
-  currentPage: number;
-  zoom: number;
   error: Error | null;
   onLoadSuccess: DocumentProps["onLoadSuccess"];
   onLoadError: DocumentProps["onLoadError"];
 }
 
 /**
- * Stateless PDF viewer — a thin wrapper around react-pdf...
+ * PDF viewer — wraps react-pdf with loading, empty, and error states.
  *
- * Owns no application state. The document, current page, and zoom are
- * received via props; load results are reported through <callbacks styleName={}></callbacks>
+ * Reads current page and zoom from the shared store internally.
  *
  * Layout contract:
  *  - Fills all remaining space in the center column.
@@ -39,14 +35,12 @@ interface PDFViewerProps {
  */
 export default function PDFViewer({
   file,
-  currentPage,
-  zoom,
   error,
   onLoadSuccess,
   onLoadError,
 }: PDFViewerProps) {
-  const loading = usePDFStore((state) => state.loading);
-
+  const currentPage = usePDFStore((state) => state.currentPage);
+  const zoom = usePDFStore((state) => state.zoom);
   if (!file) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-100">
@@ -79,7 +73,6 @@ export default function PDFViewer({
             onLoadSuccess={onLoadSuccess}
             onLoadError={onLoadError}
             loading={<LoadingView />}
-            error={error ? <ErrorView error={error} /> : null}
             className="m-auto"
           >
             <Page
@@ -90,12 +83,6 @@ export default function PDFViewer({
           </Document>
         </div>
       </div>
-
-      {loading && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <LoadingView />
-        </div>
-      )}
     </div>
   );
 }

@@ -12,7 +12,7 @@ import PDFViewer from "./components/pdf/PDFViewer";
  * Desktop layout (fills the window, no page scroll):
  *
  *   ┌───────────────────────────────────────────┐
- *   │                 Header                    │
+ * │                 Header                    │
  *   ├──────┬───────────────────────┬────────────┤
  *   │      │     PDF Toolbar        │            │
  *   │ Side │ ┌───────────────────┐ │  AI Chat   │
@@ -27,8 +27,6 @@ import PDFViewer from "./components/pdf/PDFViewer";
  */
 export default function App() {
   const currentFile = usePDFStore((state) => state.currentFile);
-  const currentPage = usePDFStore((state) => state.currentPage);
-  const zoom = usePDFStore((state) => state.zoom);
   const error = usePDFStore((state) => state.error);
   const setNumPages = usePDFStore((state) => state.setNumPages);
   const setError = usePDFStore((state) => state.setError);
@@ -40,7 +38,7 @@ export default function App() {
 
       {/* Body — fills the remaining vertical space, never scrolls */}
       <div className="flex min-h-0 flex-1">
-        {/* Left sidebar — fixed 260px */}
+        {/* Left sidebar — fixed 256px */}
         <Sidebar />
 
         {/* Center column — grows, holds toolbar + scrollable viewer */}
@@ -48,19 +46,13 @@ export default function App() {
           <PDFToolbar />
           <PDFViewer
             file={currentFile}
-            currentPage={currentPage}
-            zoom={zoom}
             error={error}
-            onLoadSuccess={(doc) => {
-              setNumPages(doc.numPages);
-            }}
-            onLoadError={(err) => {
-              setError(err);
-            }}
+            onLoadSuccess={(doc) => setNumPages(doc.numPages)}
+            onLoadError={(err) => setError(err)}
           />
         </div>
 
-        {/* Right sidebar — fixed 340px */}
+        {/* Right sidebar — fixed 320px */}
         <ChatPanel />
       </div>
 

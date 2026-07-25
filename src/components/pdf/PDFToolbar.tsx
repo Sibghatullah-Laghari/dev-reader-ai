@@ -11,12 +11,12 @@ import { usePDFStore } from "../../store/pdfStore";
 import { MAX_ZOOM, MIN_ZOOM } from "../../types/pdf";
 import ToolbarButton from "./ToolbarButton";
 
+function Divider() {
+  return <div className="h-5 w-px bg-slate-200" aria-hidden="true" />;
+}
+
 /**
- * Center-area toolbar.
- *
- * Horizontal controls for document navigation and zoom, plus the
- * "Open PDF" action and a "Fit width" placeholder. All state is read
- * from the shared PDF store...
+ * Center-area toolbar with navigation and zoom controls.
  */
 export default function PDFToolbar() {
   const openPDF = useOpenPDF();
@@ -49,7 +49,7 @@ export default function PDFToolbar() {
         onClick={previousPage}
         disabled={!hasDocument || currentPage <= 1}
       />
-      <span className="min-w-18 text-center text-xs font-medium text-slate-600 tabular-nums">
+      <span className="min-w-16 text-center text-xs font-medium text-slate-600 tabular-nums">
         {hasDocument ? `${currentPage} / ${numPages}` : "— / —"}
       </span>
       <ToolbarButton
