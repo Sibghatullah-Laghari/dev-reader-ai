@@ -7,7 +7,7 @@ import PDFToolbar from "./components/pdf/PDFToolbar";
 import PDFViewer from "./components/pdf/PDFViewer";
 
 /**
- * Main application container.
+ * Main application container..
  *
  * Desktop layout (fills the window, no page scroll):
  *
