@@ -11,8 +11,9 @@ import { usePDFStore } from "../../store/pdfStore";
 import { MAX_ZOOM, MIN_ZOOM } from "../../types/pdf";
 import ToolbarButton from "./ToolbarButton";
 
+/** Small vertical separator used between toolbar groups. */
 function Divider() {
-  return <div className="h-5 w-px bg-slate-200" aria-hidden="true" />;
+  return <div className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />;
 }
 
 /**
@@ -99,9 +100,4 @@ export default function PDFToolbar() {
       </span>
     </div>
   );
-}
-
-/** Small vertical separator used between toolbar groups. */
-function Divider() {
-  return <div className="mx-1 h-5 w-px bg-slate-200" aria-hidden="true" />;
 }

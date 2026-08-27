@@ -18,8 +18,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface PDFViewerProps {
   file: PDFFileSource | null;
   error: Error | null;
-  onLoadSuccess: DocumentProps["onLoadSuccess"];
-  onLoadError: DocumentProps["onLoadError"];
+  onLoadSuccess: (numPages: number) => void;
+  onLoadError: (error: Error) => void;
 }
 
 /**

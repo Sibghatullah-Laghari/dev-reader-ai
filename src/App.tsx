@@ -1,3 +1,4 @@
+import type { DocumentProps } from "react-pdf";
 import { usePDFStore } from "./store/pdfStore";
 import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
@@ -47,8 +48,10 @@ export default function App() {
           <PDFViewer
             file={currentFile}
             error={error}
-            onLoadSuccess={(doc) => setNumPages(doc.numPages)}
-            onLoadError={(err) => setError(err)}
+            onLoadSuccess={(doc: DocumentProps) => {
+              setNumPages(doc.numPages);
+            }}
+            onLoadError={(err: Error) => setError(err)}
           />
         </div>
 
